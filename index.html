@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/styles.css" />
+        <title>CyberAttack Simulations</title>
+    </head>
+    <body>
+        <div class="head">
+            <h1 class="title">Playground</h1>
+        </div>
+        <div class="place4simulation">
+            <div class="start_zone">
+                <button class="simulation worm" onclick="startWorm()">
+                    Worm
+                </button>
+            </div>
+            <div class="start_zone">
+                <button
+                    class="simulation popup"
+                    onclick="startAggressivePopup()"
+                >
+                    Popup
+                </button>
+            </div>
+            <div class="start_zone">
+                <button class="simulation keylogger" onclick="startKeylogger()">
+                    Keylogger
+                </button>
+            </div>
+            <div class="start_zone">
+                <button
+                    class="simulation clickJack"
+                    onclick="startClickjacking()"
+                >
+                    Clickjacking
+                </button>
+            </div>
+            <div class="start_zone">
+                <button class="simulation XSS" onclick="simulateXSS()">
+                    XSS
+                </button>
+            </div>
+        </div>
+        <div class="board"></div>
+        <script src="js/attacks.js"></script>
+    </body>
+</html>
