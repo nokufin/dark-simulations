@@ -97,34 +97,30 @@ function startWorm() {
                       Math.floor(Math.random() * errorMessages.length)
                   ];
 
-        // Random stílus kiválasztása
         const style = styles[Math.floor(Math.random() * styles.length)];
 
-        // 20% esély hogy error-ként jelenik meg
+        // 20% esély error
         if (Math.random() < 0.2) {
             console.error(message);
         }
-        // 20% esély hogy warning-ként jelenik meg
+        // 20% esély warning
         else if (Math.random() < 0.4) {
             console.warn(message);
         }
-        // 60% esély hogy stilizált log-ként jelenik meg
+        // 60% esély stilizált log
         else {
             console.log(`%c${message}`, style);
         }
 
-        // Random időközönként jelenjenek meg új üzenetek
         setTimeout(randomConsoleMessage, Math.random() * 200 + 100);
     }
 
-    // Konzol törlése és kezdő üzenet
     console.clear();
     console.log(
         "%cSYSTEM COMPROMISED",
         "color: red; font-size: 36px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"
     );
 
-    // Üzenetek
     function showProgressBar() {
         const actions = [
             "ENCRYPTING SYSTEM FILES",
@@ -148,7 +144,7 @@ function startWorm() {
                     "color: #00ff00; font-weight: bold;"
                 );
                 clearInterval(interval);
-                setTimeout(showProgressBar, Math.random() * 5000); // 5 másodpercenként új progress bar
+                setTimeout(showProgressBar, Math.random() * 5000); // 5 mp új progress bar
             } else {
                 const bar =
                     "█".repeat(Math.floor(progress / 5)) +
@@ -161,7 +157,7 @@ function startWorm() {
         }, 200);
     }
 
-    // Hamis IP címek és portok megjelenítése
+    // hamis ip-k
     function showNetworkActivity() {
         const ips = [
             "192.168.1.",
@@ -183,7 +179,7 @@ function startWorm() {
         }, 1500);
     }
 
-    // Hamis fájlmódosítások
+    // hamis fájlmódosítások
     function showFileChanges() {
         const files = [
             "C:\\Windows\\System32\\kernel32.dll",
@@ -215,9 +211,9 @@ function startWorm() {
     // Rendszer erőforrás "monitorozás"
     function showSystemStatus() {
         setInterval(() => {
-            const cpu = Math.floor(80 + Math.random() * 20); // 80-100% között
-            const ram = Math.floor(85 + Math.random() * 15); // 85-100% között
-            const disk = Math.floor(90 + Math.random() * 10); // 90-100% között
+            const cpu = Math.floor(80 + Math.random() * 20);
+            const ram = Math.floor(85 + Math.random() * 15);
+            const disk = Math.floor(90 + Math.random() * 10);
 
             console.log(
                 `%c[SYSTEM] CPU: ${cpu}% | RAM: ${ram}% | DISK: ${disk}%`,
@@ -226,7 +222,7 @@ function startWorm() {
         }, 2000);
     }
 
-    // Indítás
+    // start
     console.clear();
     console.log(
         "%cSYSTEM FULLY COMPROMISED",
@@ -237,7 +233,6 @@ function startWorm() {
     setTimeout(showFileChanges, 3000);
     setTimeout(showSystemStatus, 4000);
 
-    // Eredeti üzenetek indítása
     randomConsoleMessage();
     function worm() {
         if (wormCount < maxWorms) {
@@ -322,7 +317,6 @@ function startAggressivePopup() {
         return randomGif;
     }
 
-    // Kezdő pozi
     function getRandomPosition() {
         const width = 400;
         const height = 400;
@@ -340,6 +334,43 @@ function startAggressivePopup() {
         };
     }
 
+    function shakeWindow(window) {
+        if (window && !window.closed) {
+            const originalPos = {
+                left: window.screenLeft,
+                top: window.screenTop,
+            };
+
+            const shakeAmount = 20; // rezgés erőssége
+            let shakeCount = 0;
+            const maxShakes = 200; // rezegés mennyisége
+
+            const shake = () => {
+                if (shakeCount < maxShakes) {
+                    const randomX =
+                        originalPos.left +
+                        (Math.random() * shakeAmount - shakeAmount / 2);
+                    const randomY =
+                        originalPos.top +
+                        (Math.random() * shakeAmount - shakeAmount / 2);
+                    window.moveTo(randomX, randomY);
+                    shakeCount++;
+                    setTimeout(shake, 50);
+                } else {
+                    // eredeti pozícióba visszaállítás
+                    window.moveTo(originalPos.left, originalPos.top);
+                    // 2-5 mp és újra rezeg
+                    setTimeout(() => {
+                        shakeCount = 0;
+                        shake();
+                    }, Math.random() * 3000 + 2000);
+                }
+            };
+
+            shake();
+        }
+    }
+
     let moveStopped = false;
 
     function moveWindow(window) {
@@ -352,18 +383,27 @@ function startAggressivePopup() {
 
     setTimeout(() => {
         moveStopped = true;
+        popupWindow.forEach((window) => {
+            shakeWindow(window);
+        });
     }, 4000);
 
     function openPopup() {
         const position = getRandomPosition();
-        popupWindow = window.open("", "_blank", position + ",resizable=no");
+        const newWindow = window.open(
+            "",
+            "_blank",
+            position.specs + ",resizable=no"
+        );
 
-        if (popupWindow) {
+        if (newWindow) {
+            popupWindow.push(newWindow);
+
             const randomGif = getRandomGif();
             const randomH2 = getRandomH2();
             const randomP = getRandomP();
 
-            popupWindow.document.write(`
+            newWindow.document.write(`
             <html>
             <head>
                 <title>WHATSUP MY NEW FRIEND</title>
@@ -440,16 +480,15 @@ function startAggressivePopup() {
             </body>
             </html>`);
 
-            popupWindow.resizeTo(400, 400);
-            popupWindow.focus();
+            newWindow.resizeTo(400, 400);
+            newWindow.focus();
 
-            // Bezárás megakadályozása
-            popupWindow.onbeforeunload = (event) => {
+            newWindow.onbeforeunload = (event) => {
                 event.preventDefault();
                 event.returnValue = "";
                 return "";
             };
-            moveWindow(popupWindow);
+            moveWindow(newWindow);
         }
     }
 
@@ -494,6 +533,11 @@ function startAggressivePopup() {
             </html>`);
             lastPopup.resizeTo(650, 650);
             lastPopup.focus();
+
+            // utolsó ablak is rezeg
+            setTimeout(() => {
+                shakeWindow(lastPopup);
+            }, 1000);
         }
     }, 5000);
 }
